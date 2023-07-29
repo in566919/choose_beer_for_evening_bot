@@ -24,6 +24,7 @@ theme: /
         
     
     state: RussianOrImport
+        q!: * $beer *
         q!: * {$advise * $beer} *
         q!: * {$help * $сhoose * $beer} *
         a: Вы больше предпочитаете российское или импорт?
