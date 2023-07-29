@@ -1,9 +1,9 @@
-function getValueFromTable(integrationId, spreadsheetId, sheetName, cells) {
+function getValueFromTable(integrationId, spreadsheetId, sheetName, cell) {
     return $integration.googleSheets.readDataFromCells(
                 integrationId,
                 spreadsheetId,
                 sheetName,
-                [cells])[0].value.replace(']','').replace('[', '');
+                [cell])[0].value.replace(']','').replace('[', '');
 }
 
 
@@ -39,7 +39,8 @@ function getUrlImage (sheetName) {
     var integrationId = $secrets.get("integrationId", "Токен не найден");
     var spreadsheetId = $secrets.get("spreadsheetId", "Токен не найден");
     var size = getSizePage(integrationId, spreadsheetId, sheetName);
-    return getValueFromTable(integrationId, spreadsheetId, sheetName, size);
+    var cell = generateRandomCells(2, size + 2).toString();
+    return getValueFromTable(integrationId, spreadsheetId, sheetName, 'A'+cell);
 }
 
 

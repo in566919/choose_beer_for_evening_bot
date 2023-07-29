@@ -8,10 +8,16 @@ theme: /
             delete $session.russianOrImport;
             delete $session.filterOrUnfilter;
             delete $session.darkOrLight;
+            # var integrationId = $secrets.get("integrationId", "Токен не найден");
+            # var spreadsheetId = $secrets.get("spreadsheetId", "Токен не найден");
+            # var sheetName = 'RFL';
+            # var cell = 'A2';
+            # $reactions.answer(getValueFromTable(integrationId, spreadsheetId, sheetName, [cell]));
         go!: /Main
     
     state: Main
         if: !$session.russianOrImport
+            
             go!: /RussianOrImport
         elseif: !$session.filterOrUnfilter
             go!: /FilterOrUnfilter
@@ -20,6 +26,7 @@ theme: /
         else:
             script:
                 $session.sheetName = $session.russianOrImport + $session.filterOrUnfilter + $session.darkOrLight;
+            a: {{$session.sheetName}}
             go!: /Answer
         
     
@@ -46,7 +53,6 @@ theme: /
     
     state: FilterOrUnfilter
         a: Фильтрованное или нефильтрованное? 
-        
         state: Filter
             q: * $first *
             q!: * $filter *
@@ -64,7 +70,6 @@ theme: /
         
     state: DarkOrLight
         a: Темное или светлое?
-        
         state: Dark
             q: * $first *
             q!: * $dark *
@@ -116,7 +121,7 @@ theme: /
             $session.darkOrLight = 'D';
         go!: /Main
     state: ImportFilterDark
-        q!: * {$russian * $filter * $dark} *
+        q!: * {$import * $filter * $dark} *
         script:
             $session.russianOrImport = 'I';
             $session.filterOrUnfilter = 'F';
@@ -137,5 +142,6 @@ theme: /
         
     state: Answer
         script:
+            $reactions.answer($session.sheetName);
             $temp.img = getUrlImage($session.sheetName);
         image: {{$temp.img}}
