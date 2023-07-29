@@ -1,9 +1,9 @@
-function getValueFromTable(integrationId, spreadsheetId, sheetName) {
+function getValueFromTable(integrationId, spreadsheetId, sheetName, cells) {
     return $integration.googleSheets.readDataFromCells(
                 integrationId,
                 spreadsheetId,
                 sheetName,
-                ['A2'])[0].value.replace(']','').replace('[', '');
+                [cells])[0].value.replace(']','').replace('[', '');
 }
 
 
