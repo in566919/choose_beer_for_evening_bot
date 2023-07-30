@@ -147,6 +147,12 @@ theme: /
         script:
             $temp.img = getUrlImage ($session.sheetName);
         if: $context.response.googleSheets.result === 'success'
-            a: {{$temp.img}}
+            script:
+                $response.replies = $response.replies || [];
+                $response.replies.push({
+                    "type": "image",
+                    "imageUrl": $temp.img,
+                    "text": "Изображение" // Это поле опционально.
+                });
         else:
             a: Произошла ошибка
