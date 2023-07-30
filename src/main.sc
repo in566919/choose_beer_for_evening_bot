@@ -145,7 +145,7 @@ theme: /
         
     state: Answer
         script:
-            $temp.img = 'https://krasnoeibeloe.ru' + getUrlImage ($session.sheetName);
+            $temp.img =  getUrlImage ($session.sheetName);
         if: $context.response.googleSheets.result === 'success'
             a: {{$temp.img}}
         else:

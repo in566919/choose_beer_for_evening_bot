@@ -33,7 +33,7 @@ function generateRandomPage () {
 }
 
 function getSizePage (integrationId, spreadsheetId, sheetName) {
-    return Number(getValueFromTable(integrationId, spreadsheetId, sheetName, 'A1'));
+    return Number(getValueFromTable(integrationId, spreadsheetId, sheetName, 'B1'));
 }
 
 function getUrlImage (sheetName) {
@@ -41,5 +41,8 @@ function getUrlImage (sheetName) {
     var spreadsheetId = $secrets.get("spreadsheetId", "Токен не найден");
     var size = getSizePage(integrationId, spreadsheetId, sheetName);
     var cell = generateRandomCells(2, size + 2);
-    return getValueFromTable(integrationId, spreadsheetId, sheetName, 'A'+cell);
+    var urlSite = getValueFromTable(integrationId, spreadsheetId, sheetName, 'A'+cell)
+    var pathImg = getValueFromTable(integrationId, spreadsheetId, sheetName, 'B'+cell);
+    return urlSite + pathImg;
 }
+
