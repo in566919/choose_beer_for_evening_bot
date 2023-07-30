@@ -8,16 +8,11 @@ theme: /
             delete $session.russianOrImport;
             delete $session.filterOrUnfilter;
             delete $session.darkOrLight;
-            # var integrationId = $secrets.get("integrationId", "Токен не найден");
-            # var spreadsheetId = $secrets.get("spreadsheetId", "Токен не найден");
-            # var sheetName = 'RFL';
-            # var cell = 'A2';
-            # $reactions.answer(getValueFromTable(integrationId, spreadsheetId, sheetName, [cell]));
+            delete $session.sheetName;
         go!: /Main
     
     state: Main
         if: !$session.russianOrImport
-            
             go!: /RussianOrImport
         elseif: !$session.filterOrUnfilter
             go!: /FilterOrUnfilter
@@ -26,8 +21,7 @@ theme: /
         else:
             script:
                 $session.sheetName = $session.russianOrImport + $session.filterOrUnfilter + $session.darkOrLight;
-            a: {{$session.sheetName}}
-            go!: /Answer
+            go!: /Check
         
     
     state: RussianOrImport
@@ -52,7 +46,8 @@ theme: /
     
     
     state: FilterOrUnfilter
-        a: Фильтрованное или нефильтрованное? 
+        a: Фильтрованное или нефильтрованное?
+        
         state: Filter
             q: * $first *
             q!: * $filter *
@@ -62,7 +57,7 @@ theme: /
                 
         state: Unfilter
             q: * $second *
-            q!: * $unfilter
+            q!: * $unfilter *
             script:
                 $session.filterOrUnfilter = 'U';
                 $session.darkOrLight = 'L';
@@ -114,6 +109,7 @@ theme: /
         go!: /Main
    
     state: RussianFilterDark
+        q!: * {$russian * $dark} *
         q!: * {$russian * $filter * $dark} *
         script:
             $session.russianOrImport = 'R';
@@ -121,11 +117,12 @@ theme: /
             $session.darkOrLight = 'D';
         go!: /Main
     state: ImportFilterDark
+        q!: * {$import * $dark} *
         q!: * {$import * $filter * $dark} *
         script:
             $session.russianOrImport = 'I';
             $session.filterOrUnfilter = 'F';
-            $session.$session.darkOrLight = 'D';
+            $session.darkOrLight = 'D';
         go!: /Main
 
         
@@ -133,15 +130,23 @@ theme: /
         q!: *
         a: Я не совсем тебя понимаю... Попробуй переформулировать.
     
-    state: Any
+    state: AnyBeer
         q!: * $any *
         q!: * $recommend *
         script:
             $session.sheetName = generateRandomPage();
-        go!: /Answer
+        go!: /Check
+    
+    state: Check
+        if: $session.sheetName
+            go!: /Answer
+        else:
+            a: Что-то пошло не так..
         
     state: Answer
         script:
-            $reactions.answer($session.sheetName);
-            $temp.img = getUrlImage($session.sheetName);
-        image: {{$temp.img}}
+            $temp.img = getUrlImage ($session.sheetName);
+        if: $context.response.googleSheets.result === 'success'
+            image: {{$temp.img}}
+        else:
+            a: Произошла ошибка
