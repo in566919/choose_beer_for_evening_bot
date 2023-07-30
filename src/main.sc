@@ -147,6 +147,6 @@ theme: /
         script:
             $temp.img = getUrlImage ($session.sheetName);
         if: $context.response.googleSheets.result === 'success'
-            image: {{$temp.img}}
+            a: {{$temp.img}}
         else:
             a: Произошла ошибка
