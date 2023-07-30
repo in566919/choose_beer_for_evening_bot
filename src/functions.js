@@ -37,10 +37,7 @@ function getSizePage (integrationId, spreadsheetId, sheetName) {
 }
 
 function getUrlImage (sheetName) {
-    //var integrationId = $secrets.get("integrationId", "Токен не найден");
-    //var spreadsheetId = $secrets.get("spreadsheetId", "Токен не найден");
-    var integrationId = "08d9404e-a8e9-478a-b355-7690814749ca";
-    var spreadsheetId = "1J5QQgIXNvf1Gi6PuMBWGCZ-pH3CaE2ailiffjGRu85g";
+    var integrationId = $secrets.get("integrationId", "Токен не найден");
     var spreadsheetId = $secrets.get("spreadsheetId", "Токен не найден");
     var size = getSizePage(integrationId, spreadsheetId, sheetName);
     var cell = generateRandomCells(2, size + 2);
