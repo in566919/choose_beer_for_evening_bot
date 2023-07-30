@@ -3,7 +3,7 @@ theme: /
 
     state: Start
         q!: $regex</start>
-        a: Здравствуйте, я могу вам помочь выбрать пиво на вечер.
+        a: Приветствую, я помогу тебе подобрать пиво на вечер.
         script:
             delete $session.russianOrImport;
             delete $session.filterOrUnfilter;
